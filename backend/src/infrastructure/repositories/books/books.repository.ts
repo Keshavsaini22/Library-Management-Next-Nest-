@@ -71,4 +71,14 @@ export class BooksRepository extends Repository<BooksEntity> {
         await this.save(book);
         return book;
     }
+
+    async updateBook(payload: { uuid: string, data: any }, manager?: EntityManager) {
+        const { uuid, data } = payload;
+        const querbuilder = manager ? manager.createQueryBuilder() : this.createQueryBuilder();
+        const result = await querbuilder.update(BooksEntity)
+            .where("uuid = :uuid", { uuid: uuid })
+            .set(data)
+            .returning("*").execute();
+        return result.affected > 0 ? result.raw[0] : null;
+    }
 }

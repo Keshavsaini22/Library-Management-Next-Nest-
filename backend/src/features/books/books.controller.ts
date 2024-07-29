@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from "@nestjs/common";
 import { BooksService } from "./books.service";
-import { CreateBookDto } from "./dto/books.dto";
+import { CreateBookDto, UpdateBookDto } from "./dto/books.dto";
 
 @Controller('books')
 export class BooksController {
@@ -26,5 +26,10 @@ export class BooksController {
     async deleteBook(@Param('uuid', ParseUUIDPipe) uuid: string) {
         return await this.booksService.deleteBook({ uuid });
     }
+
+    @Put('/:uuid')
+    async updateBook(@Param('uuid', ParseUUIDPipe) uuid: string, @Body() body: UpdateBookDto) {
+        return await this.booksService.updateBook({ uuid, data: body });
+     }
 
 }

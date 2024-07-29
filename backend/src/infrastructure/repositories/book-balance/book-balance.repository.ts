@@ -14,4 +14,14 @@ export class BookBalanceRepository extends Repository<BookBalanceEntity> {
             return await manager.save(BookBalanceEntity, data);
         return await this.save(data);
     }
+
+    async updateBookBalance(payload: { book_id: string, data: { balance: number } }, manager: EntityManager) {
+        const { book_id, data } = payload;
+        const querbuilder = manager ? manager.createQueryBuilder() : this.createQueryBuilder();
+        const result = await querbuilder.update(BookBalanceEntity)
+        .where("book_id = :book_id", { book_id: book_id })
+        .set(data)
+        .returning("*").execute();
+        return result.affected > 0 ? result.raw[0] : null;
+    }
 }

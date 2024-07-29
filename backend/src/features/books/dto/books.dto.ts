@@ -1,8 +1,9 @@
 import { IsEnum, IsNumber, IsString, MaxLength } from "class-validator";
+import { PartialType } from '@nestjs/mapped-types';
 import { BooksCategory } from "src/domain/books/books-category";
 
 export class CreateBookDto {
-    
+
     @IsString()
     @MaxLength(250)
     name: string
@@ -21,3 +22,5 @@ export class CreateBookDto {
     @IsNumber()
     balance: number
 }
+
+export class UpdateBookDto extends PartialType(CreateBookDto) { }

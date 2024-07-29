@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { BookBalanceRepository } from "src/infrastructure/repositories/book-balance/book-balance.repository";
 import { BooksRepository } from "src/infrastructure/repositories/books/books.repository";
 import { DataSource } from "typeorm";
-import { CreateBookDto } from "./dto/books.dto";
-import { BookBalanceRepository } from "src/infrastructure/repositories/book-balance/book-balance.repository";
+import { CreateBookDto, UpdateBookDto } from "./dto/books.dto";
 
 @Injectable()
 export class BooksService {
@@ -46,5 +46,20 @@ export class BooksService {
     async deleteBook(payload: { uuid: string }) {
         const { uuid } = payload;
         return await this.booksRepository.deleteBook({ uuid });
+    }
+
+    async updateBook(payload: { uuid: string, data: UpdateBookDto }) {
+        const { uuid, data } = payload;
+        return await this.dataSource.transaction(async (manager) => {
+            const { name, author, description, category, balance } = data;
+            const bookResponse = await this.booksRepository.updateBook({ uuid, data: { name, author, description, category } }, manager);
+            console.log('bookResponse: ', bookResponse);
+            if (!bookResponse) throw new NotFoundException('Book not found');
+            if (balance) {
+                await this.bookBalanceRepository.updateBookBalance({ book_id: bookResponse.id, data: { balance } }, manager);
+            }
+            const updatedBook = await this.booksRepository.findBook({ uuid });
+            return updatedBook;
+        })
     }
 }
