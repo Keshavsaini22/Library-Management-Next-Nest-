@@ -50,16 +50,15 @@ export class BooksService {
 
     async updateBook(payload: { uuid: string, data: UpdateBookDto }) {
         const { uuid, data } = payload;
-        return await this.dataSource.transaction(async (manager) => {
+        const res = await this.dataSource.transaction(async (manager) => {
             const { name, author, description, category, balance } = data;
             const bookResponse = await this.booksRepository.updateBook({ uuid, data: { name, author, description, category } }, manager);
-            console.log('bookResponse: ', bookResponse);
             if (!bookResponse) throw new NotFoundException('Book not found');
             if (balance) {
                 await this.bookBalanceRepository.updateBookBalance({ book_id: bookResponse.id, data: { balance } }, manager);
             }
-            const updatedBook = await this.booksRepository.findBook({ uuid });
-            return updatedBook;
+            return bookResponse;
         })
+        return await this.booksRepository.findBook({ uuid: res.uuid });
     }
 }
