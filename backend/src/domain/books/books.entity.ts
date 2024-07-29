@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { UserRole } from "./user-role";
+import { BooksCategory } from "./books-category";
 import { IssuesEntity } from "../issues/issues.entity";
 
-@Entity('users')
-export class UsersEntity {
+@Entity('books')
+export class BooksEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -13,13 +13,16 @@ export class UsersEntity {
     @Column({ type: 'varchar', length: 250 })
     name: string;
 
-    @Column({ type: 'varchar', length: 320, unique: true })
-    email: string;
-    
-    @Column({type:'enum',enum:UserRole,default:UserRole.user})
-    role:UserRole;
+    @Column({ type: 'varchar', length: 250 })
+    author: string;
 
-    @OneToMany(()=>IssuesEntity,issue=>issue.user_id)
+    @Column({ type: 'varchar' })
+    description: string;
+
+    @Column({ type: 'enum',enum:BooksCategory})
+    category: BooksCategory;
+
+    @OneToMany(()=>IssuesEntity,issue=>issue.book_id)
     issues:IssuesEntity[]
 
     @CreateDateColumn({ name: 'created_at' })
