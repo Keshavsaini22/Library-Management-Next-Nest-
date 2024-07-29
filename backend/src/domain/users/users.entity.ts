@@ -7,7 +7,7 @@ export class UsersEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @PrimaryGeneratedColumn('uuid')
+    @Column({ type: 'uuid', default: () => 'uuid_generate_v4()', unique: true })
     uuid: string;
 
     @Column({ type: 'varchar', length: 250 })
@@ -15,12 +15,12 @@ export class UsersEntity {
 
     @Column({ type: 'varchar', length: 320, unique: true })
     email: string;
-    
-    @Column({type:'enum',enum:UserRole,default:UserRole.user})
-    role:UserRole;
 
-    @OneToMany(()=>IssuesEntity,issue=>issue.user_id)
-    issues:IssuesEntity[]
+    @Column({ type: 'enum', enum: UserRole, default: UserRole.user })
+    role: UserRole;
+
+    @OneToMany(() => IssuesEntity, issue => issue.user_id)
+    issues: IssuesEntity[]
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

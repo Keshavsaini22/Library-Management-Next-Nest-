@@ -1,11 +1,12 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BooksEntity } from "../books/books.entity";
 
 @Entity('book-balance')
-export class BooksEntity {
+export class BookBalanceEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @PrimaryGeneratedColumn('uuid')
+    @Column({ type: 'uuid', default: () => 'uuid_generate_v4()', unique: true })
     uuid: string;
 
     @Column({ type: 'int', default: 0 })

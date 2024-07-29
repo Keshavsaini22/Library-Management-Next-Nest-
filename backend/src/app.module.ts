@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { dataSourceOptions } from 'ormconfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './features/users/users.module';
+import { BooksModule } from './features/books/books.module';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: async (configService: ConfigService) => dataSourceOptions(configService),
       inject: [ConfigService],
     }),
-
-  ], controllers: [AppController],
+    UserModule,BooksModule
+  ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule { }

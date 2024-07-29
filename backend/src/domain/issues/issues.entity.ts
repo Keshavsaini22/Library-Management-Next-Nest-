@@ -8,7 +8,7 @@ export class IssuesEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @PrimaryGeneratedColumn('uuid')
+    @Column({ type: 'uuid', default: () => 'uuid_generate_v4()', unique: true })
     uuid: string;
 
     @Column({ type: 'enum', enum: IssueStatus, default: IssueStatus.issued })
