@@ -1,9 +1,11 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { IssueStatus } from "./issue-status";
 import { UsersEntity } from "../users/users.entity";
 import { BooksEntity } from "../books/books.entity";
 
 @Entity('issues')
+@Index('idx_issues_id', ['id'])    //indexing
+@Index('idx_issues_uuid', ['uuid'])
 export class IssuesEntity {
     @PrimaryGeneratedColumn()
     id: number
