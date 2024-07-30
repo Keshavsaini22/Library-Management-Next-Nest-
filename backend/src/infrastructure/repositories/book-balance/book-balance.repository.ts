@@ -15,7 +15,7 @@ export class BookBalanceRepository extends Repository<BookBalanceEntity> {
         return await this.save(data);
     }
 
-    async updateBookBalance(payload: { book_id: string, data: { balance: number } }, manager: EntityManager) {
+    async updateBookBalance(payload: { book_id: string|number, data: { balance: number } }, manager: EntityManager) {
         const { book_id, data } = payload;
         const querbuilder = manager ? manager.createQueryBuilder() : this.createQueryBuilder();
         const result = await querbuilder.update(BookBalanceEntity)

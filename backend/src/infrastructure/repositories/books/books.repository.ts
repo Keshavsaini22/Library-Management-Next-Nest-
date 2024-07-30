@@ -9,7 +9,7 @@ export class BooksRepository extends Repository<BooksEntity> {
         super(BooksEntity, dataSource.createEntityManager());
     }
 
-    async createBook(data: any, manager: EntityManager) {
+    async createBook(data: any, manager?: EntityManager) {
         if (manager) {
             return await manager.save(BooksEntity, data);
         }
